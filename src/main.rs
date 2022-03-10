@@ -1,9 +1,13 @@
 mod cli;
 mod sign;
+mod verify;
 
 use clap::Parser;
+use std::process;
+
 use crate::cli::Cli;
 use crate::sign::Sign;
+use crate::verify::Verify;
 
 fn main() {
     let cli = Cli::parse();
@@ -24,5 +28,10 @@ fn perform_sign(cli: Cli) {
 }
 
 fn perform_verify(cli: Cli) {
-    // still to be implemented
+    let verify_success = Verify::new(cli.identity, cli.file_path, cli.signature_path, cli.allowed_signers_path)
+        .verify_file();
+    if !verify_success {
+        println!("Verification of file signature failed");
+        process::exit(1)
+    }
 }
