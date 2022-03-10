@@ -15,7 +15,7 @@ fn main() {
 }
 
 fn perform_sign(cli: Cli) {
-    let sign_success = Sign::new(cli.file_path, cli.key_path, cli.signature_path).sign_file();
+    let sign_success = Sign::new(cli.file_path, cli.key_path).sign_file();
     if sign_success {
         println!("Signing file was successful!")
     } else {

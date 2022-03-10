@@ -1,19 +1,18 @@
-use std::{fs, process::{Command, Output}};
+use std::{process::{Command, Output}};
 
 pub struct Sign {
   file_path: String,
   key_path: String,
-  signature_path: Option<String>,
 }
 
 impl Sign {
 
-  pub fn new(file_path: String, key_path: Option<String>, signature_path: Option<String>) -> Sign {
+  pub fn new(file_path: String, key_path: Option<String>) -> Sign {
     if let Some(provided_key_path) = key_path {
-      Sign { file_path, key_path: provided_key_path, signature_path }
+      Sign { file_path, key_path: provided_key_path }
     } else {
       let default_key_path = default_key_path();
-      Sign { file_path, key_path: default_key_path, signature_path }
+      Sign { file_path, key_path: default_key_path }
     }
   }
 
@@ -26,7 +25,8 @@ impl Sign {
     Command::new("ssh-keygen")
       .arg("-Y").arg("sign")
       .arg("-f").arg(&self.key_path)
-      .arg("-n").arg(&self.file_path)
+      .arg("-n").arg("file")
+      .arg(&self.file_path)
       .output()
       .expect("Failed to run ssh-keygen command")
   }
@@ -46,12 +46,7 @@ impl Sign {
   }
 
   fn handle_sign_stdout(&self, stdout: String) {
-    if let Some(signature_file_path) = &self.signature_path {
-      fs::write(signature_file_path, stdout).expect("Failed to write signature to file");
-    } else {
-      let default_signature_file_path = format!("{}{}", self.file_path, ".sig");
-      fs::write(default_signature_file_path, stdout).expect("Failed to write signature to default file");
-    }
+    println!("{}", stdout);
   }
 
   fn handle_sign_stderr(&self, stderr: String) {
