@@ -28,8 +28,13 @@ fn perform_sign(cli: Cli) {
 }
 
 fn perform_verify(cli: Cli) {
-    let verify_success = Verify::new(cli.identity, cli.file_path, cli.signature_path, cli.allowed_signers_path)
-        .verify_file();
+    let verify_success = Verify::new(
+        cli.identity,
+        cli.file_path,
+        cli.signature_path,
+        cli.allowed_signers_path,
+    )
+    .verify_file();
     if !verify_success {
         println!("Verification of file signature failed");
         process::exit(1)
