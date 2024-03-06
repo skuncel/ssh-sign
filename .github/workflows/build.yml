@@ -21,8 +21,8 @@ jobs:
       with:
         name: ssh-sign_linux-x64
         path: ./target/release/ssh-sign
-  build-macos:
-    runs-on: macos-latest
+  build-macos-x86_64:
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v2
     - name: Build
@@ -30,7 +30,18 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ssh-sign_macos-x64
+        name: ssh-sign_macos-x86_64
+        path: ./target/release/ssh-sign
+  build-macos-aarch64:
+    runs-on: macos-14
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --release
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ssh-sign_macos-aarch64
         path: ./target/release/ssh-sign
   build-windows:
     runs-on: windows-latest
